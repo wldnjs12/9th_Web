@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Transition 실습</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: white;
+    }
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+    }
+    .diamond {
+      width: 150px;
+      height: 150px;
+      background: pink;
+      transform: rotate(45deg);
+      transition: background-color 0.3s ease-in-out;
+    }
+    .diamond:hover {
+      background: purple;
+    }
+  </style>
+</head>
+<body>
+  <div class="stack">
+    <div class="diamond"></div>
+    <div class="diamond"></div>
+    <div class="diamond"></div>
+  </div>
+</body>
+</html>

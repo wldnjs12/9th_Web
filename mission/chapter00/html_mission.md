@@ -29,3 +29,5 @@
     ![image.png](attachment:0353e81d-071f-4836-b83b-730f7423b937:image.png)
     
 - 찾을 수 없는 페이지 화면 https://www.smumc.co.kr/not-found
+
+.

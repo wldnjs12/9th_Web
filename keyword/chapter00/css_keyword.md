@@ -104,7 +104,6 @@ HTML 요소는 여러분이 직접 만들어서, 가운데 정렬을 구현한 �
     </aside>
     
     - background-image
-        
         요소에 배경 이미지를 지정한다
         
         ```css

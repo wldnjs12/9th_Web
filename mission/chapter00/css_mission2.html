@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    color: #fff;
+    text-align: center;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-rows: auto 48vh 1fr auto;
+    min-height: 100vh;
+  }
+
+  .layout__header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .header__left { background: #1e2a3a; padding: 28px 16px; }
+  .header__right { background: #d94d60; padding: 28px 16px; }
+
+  .layout__hero {
+    background: #3c78d8;
+    display: grid; place-items: center;
+    font-size: 40px; letter-spacing: .5px;
+  }
+
+  .layout__main {
+    display: grid;
+    grid-template-columns: 2fr 0.9fr 1.1fr;
+    min-height: 42vh;
+  }
+  .main__left {
+    background: #3d4f70; /* 옅은 남색으로 변경 */
+    display: grid; place-items: center;
+    font-size: 32px;
+  }
+  .main__gap {
+    background: #dde6f4;
+  }
+  .main__right {
+    display: flex;
+    flex-direction: column;
+  }
+  .main__image {
+    background: #9fc5e8;
+    flex: 1;
+    display: grid; place-items: center;
+    color: #0d2235; font-weight: 700; font-size: 28px;
+  }
+  .main__extra {
+    background: #44b39b;
+    flex: 1;
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 28px;
+  }
+
+  .layout__banner {
+    background: #e6c062;
+    color: #111;
+    padding: 28px 16px;
+    font-size: 32px; font-weight: 700;
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: .5px;
+  }
+</style>
+</head>
+<body>
+  <div class="layout">
+    <header class="layout__header">
+      <div class="header__left title">HEADER</div>
+      <div class="header__right title">MENU</div>
+    </header>
+
+    <section class="layout__hero">HERO</section>
+
+    <main class="layout__main">
+      <section class="main__left title">MAIN</section>
+      <div class="main__gap"></div>
+      <aside class="main__right">
+        <div class="main__image">IMAGE</div>
+        <div class="main__extra">EXTRA</div>
+      </aside>
+    </main>
+
+    <footer class="layout__banner">BANNER</footer>
+  </div>
+</body>
+</html>

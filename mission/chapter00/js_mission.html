@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body{
+      margin:0; font-family:sans-serif;
+      background:#f4f7fb; display:flex; justify-content:center;
+    }
+    .container{ width:600px; padding:40px 20px; }
+    h1{ text-align:center; margin-bottom:20px; }
+    .input-wrap{ border:1px solid #d1d5db; border-radius:6px; padding:8px 12px; margin-bottom:20px; background:#fff; }
+    .input-wrap input{ width:100%; border:0; outline:0; font-size:15px; }
+    .input-wrap input::placeholder{ color:#9ca3af; font-style:italic; }
+    .cols{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    h2{ font-size:15px; margin:0 0 10px; border-bottom:1px solid #d1d5db; }
+    .item{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #e5e7eb; }
+    .btn{ border:1px solid #c7d2fe; background:#e0e7ff; padding:2px 6px; border-radius:4px; font-size:12px; cursor:pointer; color:#1e3a8a; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>UMC Study Plan</h1>
+    <form id="todoForm" class="input-wrap">
+      <input id="todoInput" type="text" placeholder="스터디 계획을 작성해보세요!" />
+    </form>
+    <div class="cols">
+      <div>
+        <h2>해야 할 일</h2>
+        <div id="todoList"></div>
+      </div>
+      <div>
+        <h2>해낸 일</h2>
+        <div id="doneList"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const todoForm = document.getElementById('todoForm');
+    const todoInput = document.getElementById('todoInput');
+    const todoList  = document.getElementById('todoList');
+    const doneList  = document.getElementById('doneList');
+  
+    function loadArray(key) {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : [];
+    }
+    function saveArray(key, arr) {
+      localStorage.setItem(key, JSON.stringify(arr));
+    }
+  
+    let todos = loadArray('todos');
+    let dones = loadArray('dones');
+  
+    function makeTodoItem(text) {
+      const item = document.createElement('div');
+      item.className = 'item';
+  
+      const span = document.createElement('span');
+      span.textContent = text;
+  
+      const completeBtn = document.createElement('button');
+      completeBtn.textContent = '완료';
+      completeBtn.className = 'btn';
+  
+      completeBtn.addEventListener('click', function () {
+        todos = todos.filter(function (t) { return t !== text; });
+        dones.unshift(text);
+        saveArray('todos', todos);
+        saveArray('dones', dones);
+        render();
+      });
+  
+      item.appendChild(span);
+      item.appendChild(completeBtn);
+      return item;
+    }
+  
+    function makeDoneItem(text) {
+      const item = document.createElement('div');
+      item.className = 'item';
+  
+      const span = document.createElement('span');
+      span.textContent = text;
+  
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '삭제';
+      deleteBtn.className = 'btn';
+  
+      deleteBtn.addEventListener('click', function () {
+        dones = dones.filter(function (d) { return d !== text; });
+        saveArray('dones', dones);
+        render();
+      });
+  
+      item.appendChild(span);
+      item.appendChild(deleteBtn);
+      return item;
+    }
+  
+    function render() {
+      todoList.innerHTML = '';
+      doneList.innerHTML = '';
+  
+      todos.forEach(function (t) {
+        todoList.appendChild(makeTodoItem(t));
+      });
+      dones.forEach(function (d) {
+        doneList.appendChild(makeDoneItem(d));
+      });
+    }
+  
+    todoForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const text = todoInput.value.trim();
+      if (text === '') return;
+  
+      todos.unshift(text);
+      saveArray('todos', todos);
+      render();
+  
+      todoInput.value = '';
+    });
+      render();
+  </script>
+    
+</body>
+</html>

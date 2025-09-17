@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { margin:0; 
+         background:#0f111a; 
+         font-family:sans-serif; 
+         transition:background .3s; }
+  body.light { background:#ffffff; }
+
+  .nav {
+    display:flex; 
+    align-items:center; 
+    gap:40px;
+    background:#161823; 
+    padding:10px 30px; 
+    border-radius:40px;
+    width:fit-content; 
+    margin:40px auto;
+  }
+
+  .nav__logo, .nav__link {
+    color:#fff; 
+    text-decoration:none; 
+    font-weight:500;
+    padding:6px 12px; 
+    border-radius:8px;
+    cursor:pointer; 
+    user-select:none;
+  }
+
+  .nav__logo { border-radius:20px; }
+  .nav__item--active { background:#10b981; 
+                       color:#fff; }
+</style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav__logo nav__item" id="logoBtn">🔥</div>
+
+    <nav class="nav__menu">
+      <a href="#" class="nav__link nav__item">Projects</a>
+      <a href="#" class="nav__link nav__item">Members</a>
+      <a href="#" class="nav__link nav__item">FAQ</a>
+    </nav>
+  </header>
+
+<script>
+  const items = document.querySelectorAll('.nav__item');
+
+  function clearActive(){
+    items.forEach(el => el.classList.remove('nav__item--active'));
+  }
+
+  items.forEach(el => {
+    el.addEventListener('click', e => {
+      if (el.id === 'logoBtn') {
+        document.body.classList.toggle('light');
+      }
+      clearActive();
+      el.classList.add('nav__item--active');
+    });
+  });
+</script>
+</body>
+</html>

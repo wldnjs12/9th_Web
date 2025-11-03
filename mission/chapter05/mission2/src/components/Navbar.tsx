@@ -48,7 +48,7 @@ export default function Navbar() {
                     ${isActive ? "bg-pink-600 text-white" : "bg-pink-600/90 hover:bg-pink-500 text-white"}`
                   }
                 >
-                  회원가입
+                  회원 가입
                 </NavLink>
               </>
             )}

@@ -17,19 +17,26 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
+  // ✅ 구글 로그인 콜백 처리
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const accessToken = params.get("accessToken");
 
     if (accessToken) {
       console.log("✅ 구글 로그인 토큰 감지:", accessToken);
+
       fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/users/me`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data?.status && data?.data?.name) {
-            login(accessToken, data.data.name);
+          const name =
+            data?.data?.user?.name ||
+            data?.data?.name ||
+            null;
+
+          if (name) {
+            login(accessToken, name);
             window.history.replaceState({}, document.title, "/");
             window.location.reload();
           }
@@ -38,6 +45,7 @@ export default function LoginPage() {
     }
   }, [login]);
 
+  // ✅ 일반 로그인 담당 함수
   const onSubmit = async (values: LoginValues) => {
     try {
       const res = await fetch(
@@ -48,13 +56,27 @@ export default function LoginPage() {
           body: JSON.stringify(values),
         }
       );
+
       const data = await res.json();
 
-      if (data.status && data.data.accessToken) {
-        login(data.data.accessToken, data.data.name);
+      if (data?.status && data?.data?.accessToken) {
+        const accessToken = data.data.accessToken;
+
+        const userName =
+          data.data.user?.name ||
+          data.data.name ||
+          null;
+
+        console.log("🎉 로그인 성공 - 저장되는 토큰:", accessToken);
+        console.log("🎉 로그인 성공 - 저장되는 이름:", userName);
+
+        login(accessToken, userName);
         window.location.href = "/";
       } else {
-        alert("로그인 실패: " + (data.message || "아이디/비밀번호를 확인해주세요."));
+        alert(
+          "로그인 실패: " +
+            (data.message || "아이디/비밀번호를 확인해주세요.")
+        );
       }
     } catch (err) {
       console.error("로그인 에러:", err);
@@ -62,6 +84,7 @@ export default function LoginPage() {
     }
   };
 
+  // ✅ 구글 로그인 페이지로 redirect
   const handleGoogleLogin = () => {
     const base = import.meta.env.VITE_API_BASE_URL;
     if (!base) {
@@ -81,7 +104,7 @@ export default function LoginPage() {
           로그인하기
         </h1>
 
-        {/* ✅ 구글 로그인 버튼 복구 */}
+        {/* 🔥 구글 로그인 버튼 */}
         <button
           type="button"
           onClick={handleGoogleLogin}
@@ -95,12 +118,14 @@ export default function LoginPage() {
           구글로 로그인
         </button>
 
+        {/* OR 구분선 */}
         <div className="flex items-center gap-3 my-4">
           <span className="flex-1 h-px bg-zinc-700" />
           <span className="text-zinc-400 text-sm">OR</span>
           <span className="flex-1 h-px bg-zinc-700" />
         </div>
 
+        {/* 이메일 */}
         <input
           {...register("email")}
           placeholder="이메일"
@@ -114,10 +139,11 @@ export default function LoginPage() {
           <p className="text-sm text-red-500">{errors.email.message}</p>
         )}
 
+        {/* 비밀번호 */}
         <input
           {...register("password")}
-          placeholder="비밀번호"
           type="password"
+          placeholder="비밀번호"
           className={`w-full mb-3 bg-transparent border rounded-lg px-3 py-2 outline-none ${
             errors.password
               ? "border-red-500"
@@ -128,6 +154,7 @@ export default function LoginPage() {
           <p className="text-sm text-red-500">{errors.password.message}</p>
         )}
 
+        {/* 로그인 버튼 */}
         <button
           type="submit"
           disabled={isSubmitting}
@@ -136,6 +163,7 @@ export default function LoginPage() {
           {isSubmitting ? "로그인 중..." : "로그인"}
         </button>
 
+        {/* 회원가입 이동 버튼 */}
         <button
           type="button"
           onClick={() => nav("/signup")}

@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import LPCard from "../components/LPCard";
-import { updateProfile } from "../api/userapi";
+import { updateProfile } from "../api/userApi";
 
 export default function MyPage() {
   const { value: token } = useLocalStorage<string | null>("auth_token", null);

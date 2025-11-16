@@ -12,19 +12,28 @@ export async function getComments(
   const headers: any = {};
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await axios.get(`${BASE_URL}/v1/lps/${lpId}/comments`, {
-    params: { cursor, limit, order },
-    headers,
-  });
+  try {
+    const res = await axios.get(`${BASE_URL}/v1/lps/${lpId}/comments`, {
+      params: { cursor, limit, order },
+      headers,
+    });
 
-  return {
-    items: res.data.data.data ?? [],
-    nextCursor: res.data.data.nextCursor,
-    hasNext: res.data.data.hasNext,
-  };
+    return {
+      items: res.data.data.data ?? [],
+      nextCursor: res.data.data.nextCursor,
+      hasNext: res.data.data.hasNext,
+    };
+  } catch (err: any) {
+    if (err.response?.status === 401) {
+      console.warn("댓글 조회 401 → 로그인 필요 → 빈 리스트 반환");
+      return { items: [], nextCursor: null, hasNext: false };
+    }
+
+    throw err;
+  }
 }
 
-export async function createComment(lpId: number, content: string, token: string | null) {
+export async function createComment(lpId: number, content: string, token: string) {
   return axios.post(
     `${BASE_URL}/v1/lps/${lpId}/comments`,
     { content },
@@ -36,7 +45,7 @@ export async function createComment(lpId: number, content: string, token: string
   );
 }
 
-export async function updateComment(lpId: number, commentId: number, content: string, token: string | null) {
+export async function updateComment(lpId: number, commentId: number, content: string, token: string) {
   return axios.patch(
     `${BASE_URL}/v1/lps/${lpId}/comments/${commentId}`,
     { content },
@@ -48,7 +57,7 @@ export async function updateComment(lpId: number, commentId: number, content: st
   );
 }
 
-export async function deleteComment(lpId: number, commentId: number, token: string | null) {
+export async function deleteComment(lpId: number, commentId: number, token: string) {
   return axios.delete(`${BASE_URL}/v1/lps/${lpId}/comments/${commentId}`, {
     headers: {
       Authorization: `Bearer ${token}`,

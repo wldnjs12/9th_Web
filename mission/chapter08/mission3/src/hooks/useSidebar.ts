@@ -5,31 +5,34 @@ export function useSidebar() {
 
   const openSidebar = useCallback(() => setOpen(true), []);
   const closeSidebar = useCallback(() => setOpen(false), []);
-  const toggleSidebar = useCallback(() => setOpen(prev => !prev), []);
+  const toggleSidebar = useCallback(() => setOpen((prev) => !prev), []);
 
+  // 1) ESC로 닫기
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-        console.log("KEY PRESSED =>", e.key);
+    if (!open) return;
+
+    const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        console.log("ESC → closing sidebar");
         setOpen(false);
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [open]);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
     return () => {
       document.body.style.overflow = "";
     };
   }, [open]);
 
-  return {
-    open,
-    openSidebar,
-    closeSidebar,
-    toggleSidebar,
-  };
+  return { open, openSidebar, closeSidebar, toggleSidebar };
 }
